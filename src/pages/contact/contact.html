@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      微博#话题#
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form (ngSubmit)="searchLoc()" #searchForm="ngForm">
+    <ion-list>
+      <h2>请输入景点名称，我们将为您提供该景点下的话题微博</h2>
+      <h2><b>话题微博需要高级权限==</b></h2>
+      <ion-item>
+        <ion-label floating>景点名</ion-label>
+        <ion-input type="text" name="location" [(ngModel)]='location' required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button type="submit" ion-button color="primary" block [disabled]="!searchForm.form.valid">搜索</button>
+    </div>
+  </form>
+</ion-content>

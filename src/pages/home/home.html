@@ -1,0 +1,174 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>游乐万花筒</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content *ngIf="!submitted" padding>
+    <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <form (ngSubmit)="searchLoc()" #searchForm="ngForm">
+    <ion-list>
+      <h2>请输入景点名称，我们将为您提供该景点下的话题微博、天气与导航信息</h2>
+      <h2><b>话题微博需要高级权限==</b></h2>
+      <ion-item>
+        <ion-label floating>景点名</ion-label>
+        <ion-input type="text" name="location" [(ngModel)]='location' required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button type="submit" ion-button color="primary" block [disabled]="!searchForm.form.valid">搜索</button>
+    </div>
+  </form>
+</ion-content>
+
+<ion-content class="cards-bg social-cards" *ngIf="submitted" padding>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  <ion-card>
+
+    <form (ngSubmit)="sendWeibo()" #sendWeibo="ngForm">
+      <div padding>
+        <ion-list>
+          <ion-item>
+            <ion-label floating>微博</ion-label>
+            <ion-input type="text" name="weibo" [(ngModel)]='weibo' required></ion-input>
+            <button type="submit" ion-button color="primary" block [disabled]="!sendWeibo.form.valid">发微博</button>
+          </ion-item>
+        </ion-list>
+        <button type="submit" ion-button color="primary" block [disabled]="!sendWeibo.form.valid">发微博</button>
+        <button type="button" ion-button block (click)="clear()">清除搜索</button>
+      </div>
+    </form>
+
+    <br/>
+  </ion-card>
+  <h2>这是测试信息</h2>
+
+  <ion-card>
+
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="../../assets/icon/favicon.ico">
+      </ion-avatar>
+      <h2>Marty McFly</h2>
+      <p>November 5, 1955</p>
+    </ion-item>
+
+    <img src="../../assets/icon/favicon.ico">
+
+    <ion-card-content>
+      <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?!
+        Whoa. This is heavy.</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='thumbs-up'></ion-icon>
+        12 Likes
+      </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='text'></ion-icon>
+        4 Comments
+      </button>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <ion-note>
+          11h ago
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+
+  <ion-card>
+
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="../../assets/icon/favicon.ico">
+      </ion-avatar>
+      <h2>Sarah Connor</h2>
+      <p>May 12, 1984</p>
+    </ion-item>
+
+    <img src="assets/img/advance-card-tmntr.jpg">
+
+    <ion-card-content>
+      <p>I face the unknown future, with a sense of hope. Because if a machine, a Terminator, can learn the value of human life,
+        maybe we can too.</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='thumbs-up'></ion-icon>
+        30 Likes
+      </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='text'></ion-icon>
+        64 Comments
+      </button>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <ion-note>
+          30yr ago
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+
+  <ion-card>
+
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="../../assets/icon/favicon.ico">
+      </ion-avatar>
+      <h2>Dr. Ian Malcolm</h2>
+      <p>June 28, 1990</p>
+    </ion-item>
+
+    <img src="../../assets/icon/favicon.ico">
+
+    <ion-card-content>
+      <p>Your scientists were so preoccupied with whether or not they could, that they didn't stop to think if they should.</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='thumbs-up'></ion-icon>
+        46 Likes
+      </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left>
+        <ion-icon name='text'></ion-icon>
+        66 Comments
+      </button>
+      </ion-col>
+      <ion-col align-self-center text-center>
+        <ion-note>
+          2d ago
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+
+</ion-content>
