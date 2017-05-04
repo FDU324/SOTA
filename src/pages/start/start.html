@@ -4,11 +4,8 @@
     <img src="../../assets/icon/favicon.ico" />
   </div>
 
-
-  <button ion-button full (click)="weiboLogin()">
-    微博登录
-  </button>
-
+  <iframe id="sina_weibo_xd_iframe" src="https://api.weibo.com/oauth2/xd.jsp?appkey=3557549856&amp;access_token=&amp;referer=http%3A%2F%2Flocalhost%3A63342%2FpjFront%2Ftest%2Findex.html"></iframe>
+  <iframe src="http://service.weibo.com/staticjs/weiboshare.html?url=http%3A%2F%2Flocalhost%3A63342%2FOOAD%2FwsApp%2Ftest.html&amp;type=5&amp;count=1&amp;language=zh_cn&amp;showbutton=1" width="106" height="58" frameborder="0" scrolling="no" marginheight="0"></iframe>
   <!-- Float the icon right -->
   <button ion-button full color="light" (click)="see()">
     随便看看
