@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-searchbar (ionInput)="searchPOI($event)" placeholder="请输入景点"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="inputContent" (ionInput)="searchPOI()" placeholder="请输入景点"></ion-searchbar>
   </ion-navbar>
 </ion-header>
 
@@ -19,7 +19,7 @@
       热门景点
     </ion-card-header>
     <ion-card-content>
-      <button ion-item *ngFor="let HOT of HOTList" (click)="showDetail($event)">
+      <button ion-item *ngFor="let HOT of HOTList" (click)="clickHOT(HOT)">
         <p>
           <b>{{HOT}}</b>
         </p>

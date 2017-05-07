@@ -17,6 +17,7 @@ export class LocationService {
 
   userInput: string;      // 搜索时的输入
   POIList: POI[];         // 搜索后返回的POI列表
+  currentPOI: POI;         // 当前定位的POI
   showPOI: POI;           // 最后选定应该显示的POI
   showPOIID: string;      // 最后选定应该显示的POI的ID，若为"current"表示显示定位地址
 
@@ -34,25 +35,31 @@ export class LocationService {
       this.showPOIID = "current";
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
+        this.currentPOI = poi;
       });
     }).catch((error) => {
-      this.error = true;
       console.log('Error getting location', error);
+      this.error = true;
+      this.currentLongitude = 116.397573;
+      this.currentLatitude = 39.908743;
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
-      this.showPOI = null;
+      this.getShowPOI().then(poi => {
+        this.showPOI = poi;
+        this.currentPOI = poi;
+      });
     });
   }
 
   /**
-   * 返回当前位置: [经度,纬度,adcode,省名,城市名称]
+   * 返回当前位置: [经度,纬度,adcode,省名,城市名称,cityCode]
    *
    */
   getCurrentLocation() {
     if (this.error || this.currentLatitude == undefined || this.currentLongitude == undefined) {
       // 定位失败，返回北京市信息
-      return Promise.resolve(['116.397573', '39.908743', '110101', '北京市', '']);
+      return Promise.resolve(['116.397573', '39.908743', '110101', '北京市', '', '010']);
     } else {
       let url = "http://restapi.amap.com/v3/assistant/coordinate/convert?locations=" + this.currentLongitude + "," + this.currentLatitude + "&coordsys=gps&key=a55c3c970ecab69b1f6e51374a467bba";
       console.log(url);
@@ -72,7 +79,8 @@ export class LocationService {
               let adcode = response.json().regeocode.addressComponent.adcode;
               let province = response.json().regeocode.addressComponent.province;
               let cityName = response.json().regeocode.addressComponent.city;
-              re.push(adcode, province, cityName);
+              let cityCode = response.json().regeocode.addressComponent.citycode;
+              re.push(adcode, province, cityName, cityCode);
               console.log(re);
               return re;
             }
@@ -95,7 +103,7 @@ export class LocationService {
     if (this.showPOIID === "current") {
       //当前定位地址
       return this.getCurrentLocation().then((loc) => {
-        let re = new POI(this.showPOIID, loc[3] + " " + loc[4], loc[3] + " " + loc[4], loc[2], loc[0] + loc[1], '', {});
+        let re = new POI(this.showPOIID, loc[3] + " " + loc[4], loc[3] + " " + loc[4], loc[2], loc[0] + ',' + loc[1], '', {}, loc[5]);
         let url = "http://restapi.amap.com/v3/weather/weatherInfo?key=a55c3c970ecab69b1f6e51374a467bba&city=" + loc[2];
         console.log(url);
         // 请求天气
@@ -129,7 +137,7 @@ export class LocationService {
         response => {
           let poi = response.json().pois[0];
           let district = poi.pname + " " + poi.cityname + " " + poi.adname;
-          let re = new POI(this.showPOIID, poi.name, district, poi.adcode, poi.location, poi.address, {});
+          let re = new POI(this.showPOIID, poi.name, district, poi.adcode, poi.location, poi.address, {}, poi.citycode);
 
           let url = "http://restapi.amap.com/v3/weather/weatherInfo?key=a55c3c970ecab69b1f6e51374a467bba&city=" + poi.adcode;
           // 请求天气
@@ -164,11 +172,12 @@ export class LocationService {
 
   }
 
+  // 获得缓存的当前位置
   getShowPOIImmediate() {
     return this.showPOI;
   }
 
-
+  // 获得输入提示
   getPOIList(input: string) {
     this.userInput = input;
     this.POIList = [];
@@ -194,6 +203,7 @@ export class LocationService {
     );
   }
 
+  // for searchPage
   setShowPOIID(id) {
     this.showPOIID = id;
 
@@ -203,5 +213,86 @@ export class LocationService {
     });
   }
 
+  getHOTList() {
+    return ['西湖', '外滩', '故宫博物院', '九寨沟', '八达岭长城', '纳木错', '丽江古城', '张家界', '三亚', '黄山'];
+  }
+
+  getPaths(way: string) {
+    let origin = this.currentPOI.location.toString();
+    let destination = this.showPOI.location.toString();
+    console.log(origin);
+    console.log(destination);
+    let originCityCode = this.currentPOI.cityCode;
+    let destinationCityCode = this.showPOI.cityCode;
+    let url = "";
+    if (way === "car") {
+      url = "http://restapi.amap.com/v3/direction/driving?origin=" + origin + "&destination=" + destination + "&extensions=all&key=a55c3c970ecab69b1f6e51374a467bba";
+      console.log(url);
+      return this.http.get(url).toPromise().then(
+        response => {
+          let datas = response.json().route.paths[0];
+          console.log(datas);
+          return {
+            distance: datas.distance,
+            duration: datas.duration,
+            tolls: datas.tolls,
+            toll_distance: datas.toll_distance,
+            traffic_lights: datas.traffic_lights,
+            steps: datas.steps
+          };
+        }
+      ).catch(
+        error => {
+          return error;
+        }
+      );
+    } else if (way === "walk") {
+      url = "http://restapi.amap.com/v3/direction/walking?origin=" + origin + "&destination=" + destination + "&key=a55c3c970ecab69b1f6e51374a467bba";
+      console.log(url);
+      return this.http.get(url).toPromise().then(
+        response => {
+          if (response.json().route.paths === undefined) {
+            return {
+              distance: '-1'
+            }
+          } else {
+            let datas = response.json().route.paths[0];
+            console.log(datas);
+            return {
+              distance: datas.distance,
+              duration: datas.duration,
+              steps: datas.steps
+            };
+          }
+        }
+      ).catch(
+        error => {
+          return error;
+        }
+      );
+
+    } else { //bus
+      url = "http://restapi.amap.com/v3/direction/transit/integrated?origin=" + origin + "&destination=" + destination + "&city=" + originCityCode + "&cityd=" + destinationCityCode + "&key=a55c3c970ecab69b1f6e51374a467bba";
+      console.log(url);
+      return this.http.get(url).toPromise().then(
+        response => {
+          let datas = response.json().route;
+          console.log(datas);
+          console.log(datas.transits.length === 0);
+          return {
+            distance: datas.distance,
+            taxi_cost: datas.taxi_cost,
+            transits: datas.transits
+          };
+        }
+      ).catch(
+        error => {
+          return error;
+        }
+      );
+    }
+
+
+  }
 
 }

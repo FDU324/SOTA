@@ -9,7 +9,8 @@ export class POI{
               public location: string,    // 经纬度
               public address: string,     // 详细地址
               public weather?: object,
-              public nav?: string[]
+              public cityCode?: string,
+              public nav?: string[],
 
   ) {
   }
