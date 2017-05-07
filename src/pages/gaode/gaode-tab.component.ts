@@ -4,6 +4,7 @@ import {NavController, ActionSheetController} from 'ionic-angular';
 import {POI} from "../../entities/POI";
 import {GaodeService} from "../../services/gaode.service";
 import {LocationService} from "../../services/location.service";
+import {SearchPage} from "../util/search.component";
 
 @Component({
   selector: 'page-gaode',
@@ -58,6 +59,12 @@ export class GaodePage {
       console.log(data);
     });
   }
+
+  search() {
+    this.navCtrl.push(SearchPage);
+  }
+
+
 
 
 }

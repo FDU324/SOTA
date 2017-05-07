@@ -1,17 +1,21 @@
 <ion-header>
   <ion-navbar>
-    <ion-title *ngIf="showPOI===null">高德</ion-title>
-    <ion-title *ngIf="showPOI!==null">**位置</ion-title>
+    <ion-title>游乐万花筒</ion-title>
+    <ion-buttons right>
+      <button ion-button icon-only (click)="search()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-
-<ion-content padding >
+<ion-content padding>
   <ion-card>
     <ion-card-content>
       <ion-card-title>
-        <p>
+        <p><b>
           {{showPOI.name}}
+        </b>
         </p>
       </ion-card-title>
       <div>
