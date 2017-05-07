@@ -15,8 +15,6 @@ import {AboutPage} from '../pages/about/about-tab.component';
 import {GaodePage} from '../pages/gaode/gaode-tab.component';
 import {WeiboPage} from '../pages/weibo/weibo-tab.component';
 
-
-import {GaodeService} from '../services/gaode.service';
 import {LocationService} from '../services/location.service';
 
 @NgModule({
@@ -49,7 +47,6 @@ import {LocationService} from '../services/location.service';
     SplashScreen,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    GaodeService,
     LocationService
   ],
   schemas: [NO_ERRORS_SCHEMA]

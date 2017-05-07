@@ -22,14 +22,14 @@ export class SearchPage {
               public viewCtrl: ViewController,
               public gaodeService: GaodeService,
               public locationService: LocationService) {
-    this.HOTList = ['九寨沟', '故宫', '纳木错', '西湖', '外滩'];
+    this.HOTList = locationService.getHOTList();
     this.inputContent = '';
     this.POIList = [];
     this.choosePOI = null;
   }
 
-  searchPOI(ev) {
-    this.inputContent = ev.target.value;
+  searchPOI() {
+    //this.inputContent = ev.target.value;
 
     if (this.inputContent && this.inputContent.trim() != '') {
       this.locationService.getPOIList(this.inputContent).then(POIList => {
@@ -37,10 +37,9 @@ export class SearchPage {
       });
     } else {
       this.POIList = [];
-      ev.target.value = ev.target.value.trim();
+      this.inputContent = this.inputContent.trim();
     }
   }
-
 
   showDetail(POI) {
     this.locationService.setShowPOIID(POI.id).then(
@@ -52,6 +51,12 @@ export class SearchPage {
         console.log(error);
       }
     );
+  }
+
+  clickHOT(HOT){
+    console.log(HOT);
+    this.inputContent = HOT;
+    this.searchPOI();
   }
 
 

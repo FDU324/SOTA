@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 
+import {SearchPage} from "../util/search.component";
+
 @Component({
   selector: 'page-weibo',
   templateUrl: 'weibo-tab.component.html'
@@ -14,6 +16,10 @@ export class WeiboPage {
     this.location = '';
     this.submitted = false;
     this.weibo = '';
+  }
+
+  search() {
+    this.navCtrl.push(SearchPage);
   }
 
   searchLoc() {
