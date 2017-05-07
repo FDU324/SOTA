@@ -1,44 +1,58 @@
-import { NgModule, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
+import {NgModule, ErrorHandler, NO_ERRORS_SCHEMA} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
+import {HttpModule}    from '@angular/http';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-import { StartPage } from '../pages/start/start';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {Geolocation } from '@ionic-native/geolocation';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import {MyApp} from './app.component';
+import {StartPage} from '../pages/start/start';
+import {TabsPage} from '../pages/tabs/tabs';
+import {SearchPage} from '../pages/util/search.component';
+import {AboutPage} from '../pages/about/about-tab.component';
+import {GaodePage} from '../pages/gaode/gaode-tab.component';
+import {WeiboPage} from '../pages/weibo/weibo-tab.component';
+
+
+import {GaodeService} from '../services/gaode.service';
+import {LocationService} from '../services/location.service';
 
 @NgModule({
   declarations: [
     MyApp,
     AboutPage,
-    ContactPage,
-    HomePage,
+    WeiboPage,
+    GaodePage,
     TabsPage,
-    StartPage
+    StartPage,
+    SearchPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     AboutPage,
-    ContactPage,
-    HomePage,
+    WeiboPage,
+    GaodePage,
     TabsPage,
+    SearchPage,
     StartPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    Geolocation,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    GaodeService,
+    LocationService
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })
-export class AppModule {}
+export class AppModule {
+}

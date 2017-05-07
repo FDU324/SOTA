@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {App, NavController, NavParams} from 'ionic-angular';
 
-import {TabsPage } from '../tabs/tabs';
+import {TabsPage} from '../tabs/tabs';
+
+import {LocationService} from '../../services/location.service';
 
 @Component({
   selector: 'page-start',
@@ -10,15 +12,17 @@ import {TabsPage } from '../tabs/tabs';
 export class StartPage {
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,) {
+              public navParams: NavParams,
+              public appCtrl: App,
+              public locationService: LocationService) {
   }
 
   weiboLogin() {
-    this.navCtrl.push(TabsPage);
+    this.appCtrl.getRootNav().push(TabsPage);
   }
 
   see() {
-    this.navCtrl.push(TabsPage);
+    this.appCtrl.getRootNav().push(TabsPage);
   }
 
 
