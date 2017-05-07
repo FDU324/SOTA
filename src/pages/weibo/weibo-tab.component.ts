@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {NavController} from 'ionic-angular';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-weibo',
+  templateUrl: 'weibo-tab.component.html'
 })
-export class HomePage {
+export class WeiboPage {
   location: string;
   weibo: string;
   submitted: boolean;
@@ -18,9 +18,9 @@ export class HomePage {
 
   searchLoc() {
     /*var request = new XMLHttpRequest();
-    request.open("GET","http://120.25.238.161:8080/servlet/Weather?city="+this.location,false);
-    request.send();
-    this.weibo = request.responseText;*/
+     request.open("GET","http://120.25.238.161:8080/servlet/Weather?city="+this.location,false);
+     request.send();
+     this.weibo = request.responseText;*/
     this.submitted = true;
     this.location = '';
   }

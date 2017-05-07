@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <ion-searchbar (ionInput)="searchPOI($event)" placeholder="请输入景点"></ion-searchbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="POIList.length>0">
+    <button ion-item *ngFor="let POI of POIList" (click)="showDetail(POI)">
+      <p>
+        <b>{{POI.name}}</b>
+        <br/>
+        {{POI.address}}
+      </p>
+    </button>
+  </ion-list>
+  <ion-card>
+    <ion-card-header>
+      热门景点
+    </ion-card-header>
+    <ion-card-content>
+      <button ion-item *ngFor="let HOT of HOTList" (click)="showDetail($event)">
+        <p>
+          <b>{{HOT}}</b>
+        </p>
+      </button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

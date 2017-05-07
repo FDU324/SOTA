@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="showPOI===null">高德</ion-title>
+    <ion-title *ngIf="showPOI!==null">**位置</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding >
+  <ion-card>
+    <ion-card-content>
+      <ion-card-title>
+        <p>
+          {{showPOI.name}}
+        </p>
+      </ion-card-title>
+      <div>
+        <ion-item>
+          <ion-icon name="pin" item-left large></ion-icon>
+          <p text-wrap>
+            <b>位置</b>
+            <br/>
+            {{showPOI.district}}
+            <br/>
+            {{showPOI.address}}
+          </p>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="cloud" item-left large></ion-icon>
+          <p text-wrap>
+            <b>天气</b> {{" "+showPOI.weather["weather"]}}
+            <br/>
+            <b>温度</b> {{" "+showPOI.weather["temperature"]}}
+            <br/>
+            <b>风向</b> {{" "+showPOI.weather["winddirection"]}}
+            <br/>
+            <b>风力</b> {{" "+showPOI.weather["windpower"]}}
+            <br/>
+            <b>湿度</b> {{" "+showPOI.weather["humidity"]}}
+            <br/>
+            <b>最后更新于</b> {{" "+showPOI.weather["reporttime"]}}
+          </p>
+        </ion-item>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-card-title>
+        <h2>
+          路径导航
+        </h2>
+      </ion-card-title>
+      <ion-item>
+        <ion-label>怎么去？</ion-label>
+        <ion-icon *ngIf="chooseNav==='car'" name="car" item-right large></ion-icon>
+        <ion-icon *ngIf="chooseNav==='walk'" name="walk" item-right large></ion-icon>
+        <ion-icon *ngIf="chooseNav==='bus'" name="bus" item-right large></ion-icon>
+        <ion-select [(ngModel)]="chooseNav" interface="action-sheet" cancelText="取消">
+          <ion-option *ngFor="let nav of navs" [value]="nav.value">{{nav.text}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <button ion-button full color="primary" (click)="showNav()">
+        去吧
+      </button>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>
