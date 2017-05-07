@@ -25,7 +25,7 @@ export class GaodeService {
   getPOIList(input: string) {
     this.userInput = input;
     this.POIList = [];
-    let url = 'http://restapi.amap.com/v3/assistant/inputtips?&keywords=' + this.userInput + '&key=a55c3c970ecab69b1f6e51374a467bba';
+    let url = 'http://120.25.238.161/pjBack/servlet/InputTips?keywords=' + this.userInput;
 
     return this.http.get(url).toPromise().then(
       response => {

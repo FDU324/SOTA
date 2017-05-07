@@ -5,6 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 
 //import { TabsPage } from '../pages/tabs/tabs';
 import {StartPage} from '../pages/start/start';
+import {LocationService} from  '../services/location.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -12,7 +13,7 @@ import {StartPage} from '../pages/start/start';
 export class MyApp {
   rootPage: any = StartPage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, locationService: LocationService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

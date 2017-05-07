@@ -96,7 +96,7 @@ export class LocationService {
       //当前定位地址
       return this.getCurrentLocation().then((loc) => {
         let re = new POI(this.showPOIID, loc[3] + " " + loc[4], loc[3] + " " + loc[4], loc[2], loc[0] + loc[1], '', {});
-        let url = "http://restapi.amap.com/v3/weather/weatherInfo?key=a55c3c970ecab69b1f6e51374a467bba&city=" + loc[2];
+        let url = "http://120.25.238.161:8080/pjBack/servlet/Weather?adcode=" + loc[2];
         console.log(url);
         // 请求天气
         return this.http.get(url).toPromise().then(
@@ -123,7 +123,7 @@ export class LocationService {
     }
     else {
       // 搜索的POI
-      let url = "http://restapi.amap.com/v3/place/detail?key=a55c3c970ecab69b1f6e51374a467bba&id=" + this.showPOIID;
+      let url = "http://120.25.238.161:8080/pjBack/servlet/POI?poi=" + this.showPOIID;
       // 请求详细POI
       return this.http.get(url).toPromise().then(
         response => {
@@ -131,7 +131,7 @@ export class LocationService {
           let district = poi.pname + " " + poi.cityname + " " + poi.adname;
           let re = new POI(this.showPOIID, poi.name, district, poi.adcode, poi.location, poi.address, {});
 
-          let url = "http://restapi.amap.com/v3/weather/weatherInfo?key=a55c3c970ecab69b1f6e51374a467bba&city=" + poi.adcode;
+          let url = "http://120.25.238.161:8080/pjBack/servlet/Weather?adcode=" + poi.adcode;
           // 请求天气
           return this.http.get(url).toPromise().then(
             response => {
@@ -172,7 +172,8 @@ export class LocationService {
   getPOIList(input: string) {
     this.userInput = input;
     this.POIList = [];
-    let url = 'http://restapi.amap.com/v3/assistant/inputtips?&keywords=' + this.userInput + '&key=a55c3c970ecab69b1f6e51374a467bba';
+    let url = 'http://120.25.238.161:8080/pjBack/servlet/InputTips?input=' + this.userInput;
+    //let url = 'http://restapi.amap.com/v3/assistant/inputtips?&keywords=' + this.userInput + '&key=a55c3c970ecab69b1f6e51374a467bba';
 
     // 请求输入提示
     return this.http.get(url).toPromise().then(

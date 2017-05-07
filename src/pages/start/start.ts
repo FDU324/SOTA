@@ -3,7 +3,7 @@ import {App, NavController, NavParams} from 'ionic-angular';
 
 import {TabsPage} from '../tabs/tabs';
 
-import {LocationService} from '../../services/location.service';
+//import {LocationService} from '../../services/location.service';
 
 @Component({
   selector: 'page-start',
@@ -13,8 +13,7 @@ export class StartPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public appCtrl: App,
-              public locationService: LocationService) {
+              public appCtrl: App) {
   }
 
   weiboLogin() {
