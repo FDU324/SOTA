@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule, JsonpModule } from '@angular/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
@@ -23,7 +24,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    HttpModule,
+    JsonpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -41,4 +44,5 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })
+
 export class AppModule {}
