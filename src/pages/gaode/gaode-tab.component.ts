@@ -14,6 +14,9 @@ export class GaodePage {
   navs: object[];
   chooseNav: string;
 
+  navContent: object;
+
+
   //loading: boolean;
 
   constructor(public navCtrl: NavController,
@@ -44,6 +47,7 @@ export class GaodePage {
       },
     ];
     this.chooseNav = 'car';
+    this.navContent = null;
   }
 
   ionViewDidEnter() {
@@ -51,8 +55,10 @@ export class GaodePage {
   }
 
   showNav() {
+    console.log(this.chooseNav);
     this.locationService.getPaths(this.chooseNav).then((data) => {
       console.log(data);
+      this.navContent = data;
     });
   }
 

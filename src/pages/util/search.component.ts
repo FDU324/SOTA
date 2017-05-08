@@ -5,7 +5,6 @@ import {Component} from '@angular/core';
 import {NavController, ViewController} from 'ionic-angular';
 
 import {POI} from '../../entities/POI';
-import {GaodeService} from "../../services/gaode.service";
 import {LocationService} from "../../services/location.service";
 
 @Component({
@@ -20,7 +19,6 @@ export class SearchPage {
 
   constructor(public navCtrl: NavController,
               public viewCtrl: ViewController,
-              public gaodeService: GaodeService,
               public locationService: LocationService) {
     this.HOTList = locationService.getHOTList();
     this.inputContent = '';
@@ -34,7 +32,11 @@ export class SearchPage {
     if (this.inputContent && this.inputContent.trim() != '') {
       this.locationService.getPOIList(this.inputContent).then(POIList => {
         this.POIList = POIList;
-      });
+      }).catch(
+        error => {
+          console.log('searchPage searchPOI() \n'+error);
+        }
+      );
     } else {
       this.POIList = [];
       this.inputContent = this.inputContent.trim();
@@ -57,6 +59,7 @@ export class SearchPage {
     console.log(HOT);
     this.inputContent = HOT;
     this.searchPOI();
+    console.log(HOT+'1');
   }
 
 

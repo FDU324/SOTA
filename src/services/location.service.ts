@@ -25,6 +25,15 @@ export class LocationService {
               public http: Http) {
     this.error = false;
 
+    let temWeather = {
+      weather: '',
+      temperature: '',
+      winddirection: '',
+      windpower: '',
+      humidity: '',
+      reporttime: '暂无',
+    };
+
     this.geolocation.getCurrentPosition().then((resp) => {
       this.currentLatitude = resp.coords.latitude;
       this.currentLongitude = resp.coords.longitude;
@@ -33,6 +42,7 @@ export class LocationService {
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
+      this.showPOI = new POI(this.showPOIID,'北京市','北京市','110101','116.397573,39.908743','天安门广场',temWeather,'010');
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
         this.currentPOI = poi;
@@ -45,6 +55,7 @@ export class LocationService {
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
+      this.showPOI = new POI(this.showPOIID,'北京市','北京市','110101','116.397573,39.908743','天安门广场',temWeather,'010');
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
         this.currentPOI = poi;
@@ -233,6 +244,9 @@ export class LocationService {
           let datas = response.json().route.paths[0];
           console.log(datas);
           return {
+            way: way,
+            originPOI: this.currentPOI,
+            destinationPOI: this.showPOI,
             distance: datas.distance,
             duration: datas.duration,
             tolls: datas.tolls,
@@ -259,6 +273,9 @@ export class LocationService {
             let datas = response.json().route.paths[0];
             console.log(datas);
             return {
+              way: way,
+              originPOI: this.currentPOI,
+              destinationPOI: this.showPOI,
               distance: datas.distance,
               duration: datas.duration,
               steps: datas.steps
@@ -280,6 +297,9 @@ export class LocationService {
           console.log(datas);
           console.log(datas.transits.length === 0);
           return {
+            way: way,
+            originPOI: this.currentPOI,
+            destinationPOI: this.showPOI,
             distance: datas.distance,
             taxi_cost: datas.taxi_cost,
             transits: datas.transits

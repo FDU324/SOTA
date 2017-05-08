@@ -71,5 +71,80 @@
     </ion-card-content>
   </ion-card>
 
+  <div *ngIf="navContent!==null">
+    <ion-item>
+      <ion-icon name="compass" item-left large></ion-icon>
+      <p text-wrap>
+        <b>从</b><br/>当前地点
+        <br/>
+        <b>去</b><br/>
+        {{navContent.destinationPOI.name}}
+      </p>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="compass" item-left large></ion-icon>
+      <p text-wrap>
+        <b>距离</b><br/>
+        {{navContent.distance}}米
+      </p>
+    </ion-item>
+    <ion-item *ngIf="navContent.way!=='bus'">
+      <ion-icon name="time" item-left large></ion-icon>
+      <p text-wrap>
+        <b>预计时间</b><br/>
+        {{navContent.duration}}秒
+      </p>
+    </ion-item>
+    <ion-item *ngIf="navContent.way==='car'">
+      <ion-icon name="car" item-left large></ion-icon>
+      <p text-wrap>
+        <b>收费</b><br/>
+        {{navContent.tolls}}元
+        <br/>
+        <b>收费路段</b><br/>
+        {{navContent.toll_distance}}元
+        <br/>
+        <b>红绿灯</b><br/>
+        {{navContent.traffic_lights}}个
+      </p>
+    </ion-item>
+    <ion-item *ngIf="navContent.way==='bus'">
+      <ion-icon name="card" item-left large></ion-icon>
+      <p text-wrap>
+        <b>打车预计费用</b><br/>
+        {{navContent.taxi_cost}}元
+      </p>
+    </ion-item>
+    <ion-list *ngIf="navContent.way==='bus'">
+      <button ion-item *ngIf="navContent.transits.length===0">
+        暂无推荐公交路线
+      </button>
+      <button ion-item *ngFor="let transit of navContent.transits" (click)="seeStep(transit,'bus')">
+        <p>
+          <b>价格:</b>{{transit.cost}}<br/>
+          <b>预期时间:</b>{{transit.duration}}<br/>
+        </p>
+      </button>
+    </ion-list>
+    <ion-list *ngIf="navContent.way==='car'">
+      <button ion-item *ngFor="let path of navContent.paths" (click)="seeStep(path,'car')">
+        <!-- todo  -->
+      </button>
+    </ion-list>
+    <ion-list *ngIf="navContent.way==='walk'">
+      <button ion-item *ngIf="navContent.distance==='-1'">
+        暂无推荐步行路线
+      </button>
+      <button ion-item *ngFor="let step of navContent.steps" (click)="seeStep(step,'walk')">
+        <p>
+          <b>距离:</b>{{step.distance}}<br/>
+          <b>预期时间:</b>{{step.duration}}<br/>
+        </p>
+      </button>
+    </ion-list>
+  </div>
+
+
+
 
 </ion-content>
