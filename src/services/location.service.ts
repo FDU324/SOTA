@@ -42,7 +42,7 @@ export class LocationService {
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
-      this.showPOI = new POI(this.showPOIID,'北京市','北京市','110101','116.397573,39.908743','天安门广场',temWeather,'010');
+      this.showPOI = new POI(this.showPOIID, '北京市', '北京市', '110101', '116.397573,39.908743', '天安门广场', temWeather, '010');
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
         this.currentPOI = poi;
@@ -55,7 +55,7 @@ export class LocationService {
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
-      this.showPOI = new POI(this.showPOIID,'北京市','北京市','110101','116.397573,39.908743','天安门广场',temWeather,'010');
+      this.showPOI = new POI(this.showPOIID, '北京市', '北京市', '110101', '116.397573,39.908743', '天安门广场', temWeather, '010');
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
         this.currentPOI = poi;
@@ -68,12 +68,12 @@ export class LocationService {
    *
    */
   getCurrentLocation() {
-    if (this.error || this.currentLatitude == undefined || this.currentLongitude == undefined) {
+    if (this.error || typeof this.currentLatitude === "undefined" || typeof this.currentLongitude === "undefined") {
       // 定位失败，返回北京市信息
       return Promise.resolve(['116.397573', '39.908743', '110101', '北京市', '', '010']);
     } else {
       let url = "http://restapi.amap.com/v3/assistant/coordinate/convert?locations=" + this.currentLongitude + "," + this.currentLatitude + "&coordsys=gps&key=a55c3c970ecab69b1f6e51374a467bba";
-      console.log(url);
+      //console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
           let datas = response.json().locations;
@@ -116,7 +116,7 @@ export class LocationService {
       return this.getCurrentLocation().then((loc) => {
         let re = new POI(this.showPOIID, loc[3] + " " + loc[4], loc[3] + " " + loc[4], loc[2], loc[0] + ',' + loc[1], '', {}, loc[5]);
         let url = "http://120.25.238.161:8080/pjBack/servlet/Weather?adcode=" + loc[2];
-        console.log(url);
+        //console.log(url);
         // 请求天气
         return this.http.get(url).toPromise().then(
           response => {
@@ -129,7 +129,7 @@ export class LocationService {
               reporttime: response.json().lives[0].reporttime,
             };
 
-            console.log(re);
+            //console.log(re);
             return re;
           }
         ).catch(
@@ -163,7 +163,7 @@ export class LocationService {
                 reporttime: response.json().lives[0].reporttime,
               };
 
-              console.log(re);
+              //console.log(re);
               return re;
             }
           ).catch(
@@ -234,11 +234,11 @@ export class LocationService {
     console.log(origin);
     console.log(destination);
     let originCityCode = this.currentPOI.cityCode;
-    let destinationCityCode = this.showPOI.cityCode;
+    // let destinationCityCode = this.showPOI.cityCode;
     let url = "";
     if (way === "car") {
       url = "http://120.25.238.161:8080/pjBack/servlet/DrivingNavigation?coordinate=" + origin + "," + destination;
-      console.log(url);
+      //console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
           let datas = response.json().route.paths[0];
@@ -257,21 +257,26 @@ export class LocationService {
         }
       ).catch(
         error => {
+          console.log('getPaths() car \n' + error);
           return error;
         }
       );
     } else if (way === "walk") {
       url = "http://120.25.238.161:8080/pjBack/servlet/WalkingNavigation?coordinate=" + origin + "," + destination;
-      console.log(url);
+      //console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
-          if (response.json().route.paths === undefined) {
+          if ((typeof response.json().route) === "undefined") {
             return {
-              distance: '-1'
+              way: way,
+              originPOI: this.currentPOI,
+              destinationPOI: this.showPOI,
+              distance: '-1',
+              duration: '-1',
             }
           } else {
             let datas = response.json().route.paths[0];
-            console.log(datas);
+            //console.log(datas);
             return {
               way: way,
               originPOI: this.currentPOI,
@@ -284,34 +289,44 @@ export class LocationService {
         }
       ).catch(
         error => {
+          console.log('getPaths() walk \n' + error);
           return error;
         }
       );
 
     } else { //bus
       url = "http://120.25.238.161:8080/pjBack/servlet/BusNavigation?coordinate=" + origin + "," + destination + "," + originCityCode;
-      console.log(url);
+      //console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
           let datas = response.json().route;
-          console.log(datas);
-          console.log(datas.transits.length === 0);
-          return {
-            way: way,
-            originPOI: this.currentPOI,
-            destinationPOI: this.showPOI,
-            distance: datas.distance,
-            taxi_cost: datas.taxi_cost,
-            transits: datas.transits
-          };
+          if ((typeof response.json().route) === "undefined") {
+            return {
+              way: way,
+              originPOI: this.currentPOI,
+              destinationPOI: this.showPOI,
+              distance: '-1',
+              taxi_cost: '-1',
+              transits: []
+            };
+          } else {
+            return {
+              way: way,
+              originPOI: this.currentPOI,
+              destinationPOI: this.showPOI,
+              distance: datas.distance,
+              taxi_cost: datas.taxi_cost,
+              transits: datas.transits
+            };
+          }
         }
       ).catch(
         error => {
+          console.log('getPaths() else bus \n' + error);
           return error;
         }
       );
     }
-
 
   }
 

@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {NavController, ActionSheetController} from 'ionic-angular';
+import {NavController, ActionSheetController, App} from 'ionic-angular';
 
 import {POI} from "../../entities/POI";
 import {LocationService} from "../../services/location.service";
 import {SearchPage} from "../util/search.component";
+import {StepDetailPage} from './step-detail.component';
 
 @Component({
   selector: 'page-gaode',
@@ -21,6 +22,7 @@ export class GaodePage {
 
   constructor(public navCtrl: NavController,
               public actionSheetCtrl: ActionSheetController,
+              public appCtrl: App,
               public locationService: LocationService) {
     /*
      this.loading = true;
@@ -64,6 +66,13 @@ export class GaodePage {
 
   search() {
     this.navCtrl.push(SearchPage);
+  }
+
+  seeStep(step, type) {
+    this.appCtrl.getRootNav().push(StepDetailPage, {
+      type: type,
+      step: step,
+    });
   }
 
 

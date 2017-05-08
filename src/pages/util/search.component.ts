@@ -56,10 +56,10 @@ export class SearchPage {
   }
 
   clickHOT(HOT){
-    console.log(HOT);
+    //console.log(HOT);
     this.inputContent = HOT;
     this.searchPOI();
-    console.log(HOT+'1');
+    //console.log(HOT+'1');
   }
 
 

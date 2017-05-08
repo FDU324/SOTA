@@ -14,6 +14,7 @@ import {SearchPage} from '../pages/util/search.component';
 import {AboutPage} from '../pages/about/about-tab.component';
 import {GaodePage} from '../pages/gaode/gaode-tab.component';
 import {WeiboPage} from '../pages/weibo/weibo-tab.component';
+import {StepDetailPage} from '../pages/gaode/step-detail.component';
 
 import {LocationService} from '../services/location.service';
 
@@ -25,7 +26,8 @@ import {LocationService} from '../services/location.service';
     GaodePage,
     TabsPage,
     StartPage,
-    SearchPage
+    SearchPage,
+    StepDetailPage
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import {LocationService} from '../services/location.service';
     GaodePage,
     TabsPage,
     SearchPage,
-    StartPage
+    StartPage,
+    StepDetailPage
   ],
   providers: [
     StatusBar,

@@ -34,13 +34,13 @@
           <p text-wrap>
             <b>天气</b> {{" "+showPOI.weather["weather"]}}
             <br/>
-            <b>温度</b> {{" "+showPOI.weather["temperature"]}}
+            <b>温度</b> {{" "+showPOI.weather["temperature"]}} &nbsp; &#176;C
             <br/>
             <b>风向</b> {{" "+showPOI.weather["winddirection"]}}
             <br/>
-            <b>风力</b> {{" "+showPOI.weather["windpower"]}}
+            <b>风力</b> {{" "+showPOI.weather["windpower"]}} 级
             <br/>
-            <b>湿度</b> {{" "+showPOI.weather["humidity"]}}
+            <b>湿度</b> {{" "+showPOI.weather["humidity"]}} %RH
             <br/>
             <b>最后更新于</b> {{" "+showPOI.weather["reporttime"]}}
           </p>
@@ -82,19 +82,28 @@
       </p>
     </ion-item>
     <ion-item>
-      <ion-icon name="compass" item-left large></ion-icon>
-      <p text-wrap>
+      <ion-icon name="map" item-left large></ion-icon>
+      <p text-wrap *ngIf="navContent.distance!=='-1'">
         <b>距离</b><br/>
         {{navContent.distance}}米
+      </p>
+      <p text-wrap *ngIf="navContent.distance==='-1'">
+        <b>距离</b><br/>
+        未知距离
       </p>
     </ion-item>
     <ion-item *ngIf="navContent.way!=='bus'">
       <ion-icon name="time" item-left large></ion-icon>
-      <p text-wrap>
+      <p text-wrap *ngIf="navContent.duration!=='-1'">
         <b>预计时间</b><br/>
         {{navContent.duration}}秒
       </p>
+      <p text-wrap *ngIf="navContent.duration==='-1'">
+        <b>预计时间</b><br/>
+        未知时间
+      </p>
     </ion-item>
+
     <ion-item *ngIf="navContent.way==='car'">
       <ion-icon name="car" item-left large></ion-icon>
       <p text-wrap>
@@ -108,43 +117,42 @@
         {{navContent.traffic_lights}}个
       </p>
     </ion-item>
-    <ion-item *ngIf="navContent.way==='bus'">
+
+    <ion-item *ngIf="navContent.way==='bus' && navContent.taxi_cost!=='-1'">
       <ion-icon name="card" item-left large></ion-icon>
       <p text-wrap>
         <b>打车预计费用</b><br/>
         {{navContent.taxi_cost}}元
       </p>
     </ion-item>
+
     <ion-list *ngIf="navContent.way==='bus'">
       <button ion-item *ngIf="navContent.transits.length===0">
-        暂无推荐公交路线
+        暂无推荐公交路线，请尝试其它交通方式
       </button>
-      <button ion-item *ngFor="let transit of navContent.transits" (click)="seeStep(transit,'bus')">
+      <button ion-item *ngFor="let transit of navContent.transits; let i=index;" (click)="seeStep(transit,'bus')">
+        <h2>路径{{i+1}}</h2>
         <p>
-          <b>价格:</b>{{transit.cost}}<br/>
-          <b>预期时间:</b>{{transit.duration}}<br/>
+          <b>价格:</b>{{transit.cost}}元&nbsp; &nbsp;
+          <b>预期时间:</b>{{transit.duration}}秒<br/>
         </p>
       </button>
     </ion-list>
+
     <ion-list *ngIf="navContent.way==='car'">
-      <button ion-item *ngFor="let path of navContent.paths" (click)="seeStep(path,'car')">
-        <!-- todo  -->
+      <button ion-item (click)="seeStep(navContent.steps,'car')">
+        点击查看详细信息
       </button>
     </ion-list>
+
     <ion-list *ngIf="navContent.way==='walk'">
       <button ion-item *ngIf="navContent.distance==='-1'">
-        暂无推荐步行路线
+        暂无推荐步行路线，请尝试其它交通方式
       </button>
-      <button ion-item *ngFor="let step of navContent.steps" (click)="seeStep(step,'walk')">
-        <p>
-          <b>距离:</b>{{step.distance}}<br/>
-          <b>预期时间:</b>{{step.duration}}<br/>
-        </p>
+      <button ion-item *ngIf="navContent.distance!=='-1'" (click)="seeStep(navContent.steps,'walk')">
+        点击查看详细信息
       </button>
     </ion-list>
   </div>
-
-
-
 
 </ion-content>
