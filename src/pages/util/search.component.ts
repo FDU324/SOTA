@@ -5,7 +5,6 @@ import {Component} from '@angular/core';
 import {NavController, ViewController} from 'ionic-angular';
 
 import {POI} from '../../entities/POI';
-import {GaodeService} from "../../services/gaode.service";
 import {LocationService} from "../../services/location.service";
 
 @Component({
@@ -20,7 +19,6 @@ export class SearchPage {
 
   constructor(public navCtrl: NavController,
               public viewCtrl: ViewController,
-              public gaodeService: GaodeService,
               public locationService: LocationService) {
     this.HOTList = locationService.getHOTList();
     this.inputContent = '';

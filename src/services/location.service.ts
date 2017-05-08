@@ -2,7 +2,7 @@
  * Created by kadoufall on 2017/5/6.
  */
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import {Geolocation} from '@ionic-native/geolocation';
@@ -14,6 +14,7 @@ export class LocationService {
   currentLatitude: number;
   currentLongitude: number;
   error: boolean;     // 定位失败
+  private headers = new Headers({'Access-Control-Allow-Origin': '*'});
 
   userInput: string;      // 搜索时的输入
   POIList: POI[];         // 搜索后返回的POI列表
@@ -40,8 +41,6 @@ export class LocationService {
     }).catch((error) => {
       console.log('Error getting location', error);
       this.error = true;
-      this.currentLongitude = 116.397573;
-      this.currentLatitude = 39.908743;
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
@@ -131,7 +130,7 @@ export class LocationService {
     }
     else {
       // 搜索的POI
-      let url = "http://120.25.238.161:8080/pjBack/servlet/POI?poi=" + this.showPOIID;
+      let url = "http://120.25.238.161:8080/pjBack/servlet/Poi?poi=" + this.showPOIID;
       // 请求详细POI
       return this.http.get(url).toPromise().then(
         response => {
@@ -226,19 +225,22 @@ export class LocationService {
     let destinationCityCode = this.showPOI.cityCode;
     let url = "";
     if (way === "car") {
-      url = "http://restapi.amap.com/v3/direction/driving?origin=" + origin + "&destination=" + destination + "&extensions=all&key=a55c3c970ecab69b1f6e51374a467bba";
+      url = "http://120.25.238.161:8080/pjBack/servlet/DrivingNavigation?coordinate=" + origin + "," + destination;
       console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
           let datas = response.json().route.paths[0];
           console.log(datas);
           return {
+            way: way,
             distance: datas.distance,
             duration: datas.duration,
             tolls: datas.tolls,
             toll_distance: datas.toll_distance,
             traffic_lights: datas.traffic_lights,
-            steps: datas.steps
+            steps: datas.steps,
+            originPOI: this.currentPOI,
+            destinationPOI: this.showPOI
           };
         }
       ).catch(
@@ -247,7 +249,7 @@ export class LocationService {
         }
       );
     } else if (way === "walk") {
-      url = "http://restapi.amap.com/v3/direction/walking?origin=" + origin + "&destination=" + destination + "&key=a55c3c970ecab69b1f6e51374a467bba";
+      url = "http://120.25.238.161:8080/pjBack/servlet/WalkingNavigation?coordinate=" + origin + "," + destination;
       console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
@@ -259,9 +261,12 @@ export class LocationService {
             let datas = response.json().route.paths[0];
             console.log(datas);
             return {
+              way: way,
               distance: datas.distance,
               duration: datas.duration,
-              steps: datas.steps
+              steps: datas.steps,
+              originPOI: this.currentPOI,
+              destinationPOI: this.showPOI
             };
           }
         }
@@ -272,7 +277,7 @@ export class LocationService {
       );
 
     } else { //bus
-      url = "http://restapi.amap.com/v3/direction/transit/integrated?origin=" + origin + "&destination=" + destination + "&city=" + originCityCode + "&cityd=" + destinationCityCode + "&key=a55c3c970ecab69b1f6e51374a467bba";
+      url = "http://120.25.238.161:8080/pjBack/servlet/BusNavigation?coordinate=" + origin + "," + destination + "," + originCityCode;
       console.log(url);
       return this.http.get(url).toPromise().then(
         response => {
@@ -280,9 +285,12 @@ export class LocationService {
           console.log(datas);
           console.log(datas.transits.length === 0);
           return {
+            way: way,
             distance: datas.distance,
             taxi_cost: datas.taxi_cost,
-            transits: datas.transits
+            transits: datas.transits,
+            originPOI: this.currentPOI,
+            destinationPOI: this.showPOI
           };
         }
       ).catch(
