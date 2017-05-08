@@ -32,7 +32,11 @@ export class SearchPage {
     if (this.inputContent && this.inputContent.trim() != '') {
       this.locationService.getPOIList(this.inputContent).then(POIList => {
         this.POIList = POIList;
-      });
+      }).catch(
+        error => {
+          console.log('searchPage searchPOI() \n'+error);
+        }
+      );
     } else {
       this.POIList = [];
       this.inputContent = this.inputContent.trim();
@@ -55,6 +59,7 @@ export class SearchPage {
     console.log(HOT);
     this.inputContent = HOT;
     this.searchPOI();
+    console.log(HOT+'1');
   }
 
 

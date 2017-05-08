@@ -2,7 +2,7 @@
  * Created by kadoufall on 2017/5/6.
  */
 import {Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 import {Geolocation} from '@ionic-native/geolocation';
@@ -14,7 +14,6 @@ export class LocationService {
   currentLatitude: number;
   currentLongitude: number;
   error: boolean;     // 定位失败
-  private headers = new Headers({'Access-Control-Allow-Origin': '*'});
 
   userInput: string;      // 搜索时的输入
   POIList: POI[];         // 搜索后返回的POI列表
@@ -26,6 +25,15 @@ export class LocationService {
               public http: Http) {
     this.error = false;
 
+    let temWeather = {
+      weather: '',
+      temperature: '',
+      winddirection: '',
+      windpower: '',
+      humidity: '',
+      reporttime: '暂无',
+    };
+
     this.geolocation.getCurrentPosition().then((resp) => {
       this.currentLatitude = resp.coords.latitude;
       this.currentLongitude = resp.coords.longitude;
@@ -34,6 +42,7 @@ export class LocationService {
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
+      this.showPOI = new POI(this.showPOIID,'北京市','北京市','110101','116.397573,39.908743','天安门广场',temWeather,'010');
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
         this.currentPOI = poi;
@@ -41,9 +50,12 @@ export class LocationService {
     }).catch((error) => {
       console.log('Error getting location', error);
       this.error = true;
+      this.currentLongitude = 116.397573;
+      this.currentLatitude = 39.908743;
       this.userInput = '';
       this.POIList = [];
       this.showPOIID = "current";
+      this.showPOI = new POI(this.showPOIID,'北京市','北京市','110101','116.397573,39.908743','天安门广场',temWeather,'010');
       this.getShowPOI().then(poi => {
         this.showPOI = poi;
         this.currentPOI = poi;
@@ -233,14 +245,14 @@ export class LocationService {
           console.log(datas);
           return {
             way: way,
+            originPOI: this.currentPOI,
+            destinationPOI: this.showPOI,
             distance: datas.distance,
             duration: datas.duration,
             tolls: datas.tolls,
             toll_distance: datas.toll_distance,
             traffic_lights: datas.traffic_lights,
-            steps: datas.steps,
-            originPOI: this.currentPOI,
-            destinationPOI: this.showPOI
+            steps: datas.steps
           };
         }
       ).catch(
@@ -262,11 +274,11 @@ export class LocationService {
             console.log(datas);
             return {
               way: way,
+              originPOI: this.currentPOI,
+              destinationPOI: this.showPOI,
               distance: datas.distance,
               duration: datas.duration,
-              steps: datas.steps,
-              originPOI: this.currentPOI,
-              destinationPOI: this.showPOI
+              steps: datas.steps
             };
           }
         }
@@ -286,11 +298,11 @@ export class LocationService {
           console.log(datas.transits.length === 0);
           return {
             way: way,
+            originPOI: this.currentPOI,
+            destinationPOI: this.showPOI,
             distance: datas.distance,
             taxi_cost: datas.taxi_cost,
-            transits: datas.transits,
-            originPOI: this.currentPOI,
-            destinationPOI: this.showPOI
+            transits: datas.transits
           };
         }
       ).catch(
